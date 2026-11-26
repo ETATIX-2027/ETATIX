@@ -1,0 +1,14 @@
+project_id = "etatix"
+
+[functions.etx-create-order]
+verify_jwt = true
+
+[functions.etx-my-tickets]
+verify_jwt = true
+
+[functions.etx-checkin]
+verify_jwt = true
+
+[functions.etx-midtrans-webhook]
+# Midtrans cannot attach a Supabase user JWT; verify the provider signature in the function.
+verify_jwt = false
