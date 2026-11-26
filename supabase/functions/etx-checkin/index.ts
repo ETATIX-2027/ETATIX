@@ -2,6 +2,20 @@
  // @ts-ignore: Deno resolves this URL import at runtime.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+// Access Deno without requiring Deno type definitions in Next.js.
+const deno = (
+  globalThis as unknown as {
+    Deno: {
+      serve: (
+        handler: (req: Request) => Response | Promise<Response>
+      ) => void;
+      env: {
+        get: (name: string) => string | undefined;
+      };
+    };
+  }
+).Deno;
+
 const cors = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
@@ -18,7 +32,7 @@ const reply = (body: unknown, status = 200) =>
     },
   });
 
-Deno.serve(async (req) => {
+deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: cors });
   }
@@ -27,11 +41,14 @@ Deno.serve(async (req) => {
     return reply({ error: 'METHOD_NOT_ALLOWED' }, 405);
   }
 
-  const url = Deno.env.get('SUPABASE_URL');
-  const anon = Deno.env.get('SUPABASE_ANON_KEY');
+  const url = deno.env.get('SUPABASE_URL');
+  const anon = deno.env.get('SUPABASE_ANON_KEY');
 
   if (!url || !anon) {
-    return reply({ error: 'SERVER_CONFIGURATION_ERROR' }, 500);
+    return reply(
+      { error: 'SERVER_CONFIGURATION_ERROR' },
+      500
+    );
   }
 
   const auth = req.headers.get('Authorization');
@@ -88,7 +105,7 @@ Deno.serve(async (req) => {
       'etx_checkin_ticket',
       {
         p_ticket_code: ticketCode.trim().toUpperCase(),
-      },
+      }
     );
 
     if (error) {
@@ -104,7 +121,7 @@ Deno.serve(async (req) => {
 
     return reply(
       { error: 'INTERNAL_SERVER_ERROR' },
-      500,
+      500
     );
   }
 });
