@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Dashboard pengelolaan event dan tiket ETATIX.">
+<meta name="theme-color" content="#10182c">
+<title>Dashboard Pemilik — ETATIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#10182c;--panel:#18233b;--panel2:#202e49;--blue:#3978f6;--cyan:#57d5d0;--text:#edf3ff;--muted:#9aabc9;--line:#2c3b59;--red:#ff687d;--green:#42c99a}
+*{box-sizing:border-box}body{margin:0;background:#0c1425;color:var(--text);font:14px 'Plus Jakarta Sans',sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:#101a30;border-right:1px solid var(--line);padding:24px 16px;position:sticky;top:0;height:100vh}.brand{font-size:22px;font-weight:800;letter-spacing:1px;margin:4px 10px 30px}.brand span{color:var(--cyan)}.ownerlabel{font-size:10px;letter-spacing:1.5px;color:var(--muted);padding:0 12px 12px}.nav button{width:100%;display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;color:var(--muted);background:none;text-align:left;margin:3px 0;font-weight:700}.nav button.active,.nav button:hover{background:#223453;color:#fff}.nav b{font-size:17px;width:20px;text-align:center}.sidebottom{position:absolute;bottom:20px;left:16px;right:16px}.main{padding:28px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:28px}.top h1{margin:0;font-size:25px}.muted{color:var(--muted)}.btn{background:var(--blue);color:white;padding:10px 15px;border-radius:9px;font-weight:800}.btn.secondary{background:#293a59}.btn.danger{background:#713246}.btn.ghost{background:transparent;border:1px solid var(--line)}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px}.stat small{color:var(--muted);font-weight:700}.stat strong{display:block;font-size:26px;margin-top:9px}.panel{margin:16px 0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.panel h2{font-size:17px;margin:0}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.7px}td{font-size:13px}.pill{display:inline-block;border-radius:99px;background:#233858;color:#bcd3ff;padding:5px 9px;font-size:11px;font-weight:800}.pill.green{background:#173e3b;color:#78e1c2}.pill.orange{background:#493923;color:#ffd18a}.actions{display:flex;gap:7px;flex-wrap:wrap}.small{padding:7px 10px;font-size:11px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:var(--muted);font-size:12px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;background:#0e192d;border:1px solid var(--line);border-radius:9px;color:var(--text);padding:11px;outline:none}.field textarea{min-height:95px;resize:vertical}.field.full{grid-column:1/-1}.modal{position:fixed;inset:0;background:#050b16cc;display:grid;place-items:center;padding:16px;z-index:10}.modalbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;width:min(700px,100%);max-height:92vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modalhead h2{margin:0}.notice{padding:12px;border-radius:10px;background:#263957;color:#d6e4ff;margin:12px 0;line-height:1.6}.notice.error{background:#482735;color:#ffc2ca}.notice.ok{background:#173c37;color:#a6f0d8}.loginwrap{min-height:100vh;display:grid;place-items:center;padding:20px}.login{width:min(430px,100%);background:var(--panel);border:1px solid var(--line);padding:28px;border-radius:18px}.login h1{margin:0 0 6px}.login .field{margin:14px 0}.empty{text-align:center;padding:35px;color:var(--muted)}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.toolbar input{background:#0e192d;border:1px solid var(--line);color:white;padding:10px;border-radius:9px}.toast{position:fixed;right:18px;bottom:18px;background:#253957;padding:13px 17px;border-radius:10px;z-index:20;box-shadow:0 8px 30px #0006}.mobilebar{display:none}.banner-preview{width:100%;max-height:220px;object-fit:cover;border-radius:10px;background:#0e192d;border:1px solid var(--line);margin-top:8px}.cover-preview{width:100%;max-height:240px;object-fit:cover;border-radius:10px;background:#0e192d;border:1px solid var(--line);margin-top:8px}.cover-upload-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}.banner-row{display:flex;align-items:center;gap:12px;min-width:560px}.banner-thumb{width:112px;height:58px;object-fit:cover;border-radius:8px;background:#0e192d}.upload-help{font-size:11px;color:var(--muted);line-height:1.6}.file-input{padding:9px!important}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+button:disabled{opacity:.55;cursor:not-allowed}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.side{position:relative;height:auto;padding:12px}.brand{margin:5px 8px 12px}.ownerlabel,.sidebottom{display:none}.nav{display:flex;overflow:auto;gap:4px}.nav button{white-space:nowrap;width:auto;margin:0;padding:9px}.main{padding:18px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.top h1{font-size:20px}.cards{gap:9px}.stat{padding:13px}.stat strong{font-size:21px}}
+</style>
+</head>
+<body>
+<div id="loginView" class="loginwrap">
+ <div class="login">
+  <div class="brand">ETA<span>TIX</span></div>
+  <h1>Dashboard Pemilik</h1><p class="muted">Masuk menggunakan akun pemilik ETATIX yang telah didaftarkan.</p>
+  <div id="loginNotice" class="notice hidden" role="status" aria-live="polite"></div>
+  <div class="field"><label for="email">Email pemilik</label><input id="email" type="email" autocomplete="username" placeholder="email@domain.com"></div>
+  <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Password akun Supabase"></div>
+  <button class="btn" id="loginBtn" style="width:100%">Masuk ke Dashboard</button>
+  <p class="muted" style="font-size:11px;line-height:1.6;margin-top:16px">Akses dibatasi di sisi database melalui fungsi etx_is_owner(). Mengetahui URL halaman ini saja tidak memberikan akses admin.</p>
+  <p><a href="index.html" style="color:var(--cyan)">← Kembali ke website</a></p>
+ </div>
+</div>
+<div id="adminView" class="shell hidden">
+ <aside class="side">
+  <div class="brand">ETA<span>TIX</span></div><div class="ownerlabel">OWNER CONTROL CENTER</div>
+  <nav class="nav">
+   <button class="active" data-tab="overview"><b>⌂</b> Ringkasan</button>
+   <button data-tab="events"><b>▣</b> Event</button>
+   <button data-tab="tickets"><b>♢</b> Jenis Tiket</button>
+   <button data-tab="banners"><b>▧</b> Banner</button>
+   <button data-tab="orders"><b>▤</b> Pesanan</button>
+   <button data-tab="issued"><b>▧</b> Tiket Terbit</button>
+   <button data-tab="payments"><b>Rp</b> Pembayaran</button>
+  </nav>
+  <div class="sidebottom"><div id="ownerEmail" class="muted" style="font-size:11px;overflow-wrap:anywhere;margin-bottom:10px"></div><button class="btn secondary" id="logoutBtn" style="width:100%">Keluar</button></div>
+ </aside>
+ <main class="main">
+  <header class="top"><div><div class="muted" style="font-size:12px">ETATIX / OWNER</div><h1 id="pageTitle">Ringkasan</h1></div><button class="btn" id="newEventBtn">+ Tambah Event</button></header>
+  <div id="content"><div class="empty">Memuat dashboard...</div></div>
+ </main>
+</div>
+<div id="eventModal" class="modal hidden">
+ <div class="modalbox">
+  <div class="modalhead"><h2 id="eventModalTitle">Tambah Event</h2><button class="btn secondary small" id="closeModal">Tutup</button></div>
+  <div id="eventFormNotice" class="notice hidden" role="status" aria-live="polite"></div>
+  <form id="eventForm">
+   <input id="eventId" type="hidden">
+   <div class="formgrid">
+    <div class="field"><label>Judul event *</label><input id="evTitle" required maxlength="180"></div>
+    <div class="field"><label>Slug URL *</label><input id="evSlug" required maxlength="180"></div>
+    <div class="field"><label>Kategori</label><input id="evCategory" placeholder="Musik, Pameran, Olahraga..."></div>
+    <div class="field"><label>Kota</label><input id="evCity"></div>
+    <div class="field"><label>Nama venue</label><input id="evVenue"></div>
+    <div class="field"><label>Alamat venue</label><input id="evAddress"></div>
+    <div class="field"><label>Mulai *</label><input id="evStart" type="datetime-local" required></div>
+    <div class="field"><label>Selesai</label><input id="evEnd" type="datetime-local"></div>
+    <input id="evCover" type="hidden"><input id="evCoverPath" type="hidden"><div class="field full"><label for="evCoverFile">Gambar cover event</label><input class="file-input" id="evCoverFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div class="upload-help">Pilih gambar langsung dari galeri HP atau komputer. Format JPG, PNG, WEBP, atau GIF. Maksimal 5 MB. Gambar akan diunggah otomatis ke Supabase Storage saat event disimpan.</div><img id="evCoverPreview" class="cover-preview hidden" alt="Pratinjau cover event"><div class="cover-upload-actions"><button type="button" class="btn secondary small hidden" id="removeEvCover">Hapus pilihan gambar</button><span class="upload-help" id="evCoverStatus">Belum ada gambar cover.</span></div></div>
+    <div class="field full"><label>Deskripsi</label><textarea id="evDescription"></textarea></div>
+    <div class="field"><label>Status</label><select id="evStatus"><option value="draft">Draft</option><option value="published">Published</option><option value="cancelled">Cancelled</option></select></div>
+   </div>
+   <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px"><button type="button" class="btn secondary" id="cancelEvent">Batal</button><button class="btn" id="eventSaveBtn" type="submit">Simpan Event</button></div>
+  </form>
+ </div>
+</div>
+<div id="bannerModal" class="modal hidden">
+ <div class="modalbox">
+  <div class="modalhead"><h2 id="bannerModalTitle">Tambah Banner</h2><button class="btn secondary small" id="closeBannerModal">Tutup</button></div>
+  <div id="bannerFormNotice" class="notice hidden" role="status" aria-live="polite"></div>
+  <form id="bannerForm">
+   <input id="bannerId" type="hidden"><input id="bannerOldPath" type="hidden">
+   <div class="formgrid">
+    <div class="field full"><label>Gambar banner *</label><input class="file-input" id="bannerFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required><div class="upload-help">Format JPG, PNG, WEBP, atau GIF. Maksimal 5 MB. Disarankan rasio gambar 3:1.</div><img id="bannerPreview" class="banner-preview hidden" alt="Pratinjau banner"></div>
+    <div class="field"><label>Judul banner *</label><input id="bannerTitle" required maxlength="120"></div>
+    <div class="field"><label>Label kecil</label><input id="bannerTag" maxlength="40" placeholder="PROMO SPESIAL"></div>
+    <div class="field full"><label>Subjudul</label><input id="bannerSub" maxlength="180"></div>
+    <div class="field full"><label>Link tujuan (opsional)</label><input id="bannerLink" type="text" maxlength="500" placeholder="#/explore atau https://... "></div>
+    <div class="field"><label>Urutan tampil</label><input id="bannerOrder" type="number" min="0" step="1" value="0"></div>
+    <div class="field"><label>Status</label><select id="bannerActive"><option value="true">Aktif</option><option value="false">Nonaktif</option></select></div>
+   </div>
+   <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px"><button type="button" class="btn secondary" id="cancelBanner">Batal</button><button class="btn" id="saveBannerBtn" type="submit">Upload & Simpan Banner</button></div>
+  </form>
+ </div>
+</div>
+<div id="ticketModal" class="modal hidden">
+ <div class="modalbox">
+  <div class="modalhead"><h2 id="ticketModalTitle">Jenis Tiket</h2><button class="btn secondary small" id="closeTicketModal">Tutup</button></div>
+  <div id="ticketFormNotice" class="notice hidden" role="status" aria-live="polite"></div>
+  <form id="ticketForm">
+   <input id="ticketId" type="hidden">
+   <div class="formgrid">
+    <div class="field full"><label>Event *</label><select id="ticketEvent" required></select></div>
+    <div class="field"><label>Nama tiket *</label><input id="ticketName" required></div>
+    <div class="field"><label>Harga (Rupiah) *</label><input id="ticketPrice" type="number" min="0" required></div>
+    <div class="field"><label>Kuota *</label><input id="ticketQuota" type="number" min="1" required></div>
+    <div class="field"><label>Terjual</label><input id="ticketSold" type="number" min="0" value="0"></div>
+    <div class="field"><label>Aktif</label><select id="ticketActive"><option value="true">Ya</option><option value="false">Tidak</option></select></div>
+   </div>
+   <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px"><button type="button" class="btn secondary" id="cancelTicket">Batal</button><button class="btn" type="submit">Simpan Jenis Tiket</button></div>
+  </form>
+ </div>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script>
+"use strict";
+const SUPABASE_URL="https://vnlmfkqabjoukigslniq.supabase.co";
+const SUPABASE_KEY="sb_publishable_4aRRVz9xe9s2GW2fjlsHyw_JiuWSRYl"; // publishable/anon key only
+const SUPABASE_CONFIGURED = Boolean(window.supabase && typeof window.supabase.createClient === "function" && SUPABASE_KEY && !SUPABASE_KEY.includes("ISI_PUBLISHABLE_KEY"));
+const sb = SUPABASE_CONFIGURED ? window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY) : null;
+let currentTab="overview", cache={events:[],types:[],banners:[]};
+const BANNER_BUCKET="etx-banners", MAX_BANNER_BYTES=5*1024*1024;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=v=>"Rp"+Number(v||0).toLocaleString("id-ID");
+function toast(s){$("toast").textContent=s;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),3200)}
+function notice(id,msg,bad=false){$(id).textContent=msg;$(id).classList.remove("hidden","error","ok");$(id).classList.add(bad?"error":"ok")}
+function hide(id){$(id).classList.add("hidden")}
+function showLogin(msg=""){ $("loginView").classList.remove("hidden");$("adminView").classList.add("hidden");hide("loginNotice");if(msg)notice("loginNotice",msg,true)}
+async function ownerCheck(){
+ const {data,error}=await sb.rpc("etx_is_owner");
+ if(error)throw new Error("Pemeriksaan pemilik gagal. Jalankan migration SQL ETATIX dan pastikan akun Anda terdaftar. Detail: "+error.message);
+ if(data!==true)throw new Error("Akun ini bukan akun pemilik ETATIX. Dashboard hanya untuk pemilik.");
+ return true;
+}
+async function boot(){
+ if(!SUPABASE_CONFIGURED){showLogin("Supabase belum dikonfigurasi. Isi publishable key lengkap pada SUPABASE_KEY di admin.html. Pastikan pustaka Supabase dapat dimuat.");return}
+ const {data:{session}}=await sb.auth.getSession();
+ if(!session){showLogin();return}
+ try{await ownerCheck();$("loginView").classList.add("hidden");$("adminView").classList.remove("hidden");$("ownerEmail").textContent=session.user.email||"Pemilik";await loadTab(currentTab)}
+ catch(e){await sb.auth.signOut();showLogin(e.message)}
+}
+$("loginBtn").onclick=async()=>{
+ hide("loginNotice");$("loginBtn").disabled=true;
+ try{if(!SUPABASE_CONFIGURED)throw new Error("Supabase belum dikonfigurasi. Isi publishable key terlebih dahulu.");const {error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error)throw error;await boot()}
+ catch(e){notice("loginNotice",e.message,true)}
+ finally{$("loginBtn").disabled=false}
+};
+$("password").addEventListener("keydown",e=>{if(e.key==="Enter")$("loginBtn").click()});
+$("logoutBtn").onclick=async()=>{if(sb)await sb.auth.signOut();showLogin("Anda sudah keluar.")};
+if(sb) sb.auth.onAuthStateChange((_event)=>{if(_event==="SIGNED_OUT")showLogin()});
+async function loadTab(tab){
+ currentTab=tab;document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+ const titles={overview:"Ringkasan",events:"Manajemen Event",tickets:"Jenis Tiket",banners:"Manajemen Banner",orders:"Pesanan",issued:"Tiket Terbit",payments:"Pembayaran"};
+ $("pageTitle").textContent=titles[tab];$("content").innerHTML='<div class="empty">Memuat data...</div>';
+ try{
+  if(tab==="overview")await overview();
+  if(tab==="events")await eventsPage();
+  if(tab==="tickets")await ticketsPage();
+  if(tab==="banners")await bannersPage();
+  if(tab==="orders")await dataTable("etx_orders","Pesanan",["id","order_number","user_id","buyer_name","buyer_email","total_amount","status","created_at"]);
+  if(tab==="issued")await dataTable("etx_issued_tickets","Tiket Terbit",["id","ticket_code","owner_id","event_id","ticket_type_id","status","checked_in_at","created_at"]);
+  if(tab==="payments")await dataTable("etx_payments","Pembayaran",["id","order_id","amount","status","payment_method","created_at"]);
+ }catch(e){$("content").innerHTML=`<div class="notice error">${esc(e.message)}</div>`}
+}
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>loadTab(b.dataset.tab));
+$("newEventBtn").onclick=()=>openEvent();
+async function overview(){
+ const tables=["etx_events","etx_orders","etx_issued_tickets","etx_payments"],counts={};
+ for(const t of tables){const {count,error}=await sb.from(t).select("*",{count:"exact",head:true});if(error)throw error;counts[t]=count||0}
+ const {data:events,error}=await sb.from("etx_events").select("id,title,status,created_at").order("created_at",{ascending:false}).limit(6);if(error)throw error;
+ const {data:payments}=await sb.from("etx_payments").select("amount,status");
+ const revenue=(payments||[]).filter(p=>String(p.status||"").toLowerCase()==="paid").reduce((s,p)=>s+Number(p.amount||0),0);
+ $("content").innerHTML=`<div class="cards">
+ <div class="stat"><small>Total Event</small><strong>${counts.etx_events}</strong></div>
+ <div class="stat"><small>Total Pesanan</small><strong>${counts.etx_orders}</strong></div>
+ <div class="stat"><small>Tiket Terbit</small><strong>${counts.etx_issued_tickets}</strong></div>
+ <div class="stat"><small>Pembayaran Tercatat</small><strong>${counts.etx_payments}</strong></div>
+ </div><div class="panel"><div class="panelhead"><h2>Ringkasan Pendapatan</h2><span class="pill green">Status paid</span></div><strong style="font-size:28px">${money(revenue)}</strong><p class="muted">Dihitung dari baris pembayaran berstatus paid. Cocokkan dengan status dan nominal gateway pembayaran Anda.</p></div>
+ <div class="panel"><div class="panelhead"><h2>Event Terbaru</h2><button class="btn small" onclick="loadTab('events')">Kelola Event</button></div>${eventTable(events||[])}</div>`;
+}
+function eventTable(rows){
+ if(!rows.length)return '<div class="empty">Belum ada event.</div>';
+ return `<div class="tablewrap"><table><thead><tr><th>Event</th><th>Status</th><th>Dibuat</th><th>Aksi</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.title)}</td><td><span class="pill">${esc(r.status)}</span></td><td>${r.created_at?new Date(r.created_at).toLocaleDateString("id-ID"):"—"}</td><td><button class="btn secondary small" onclick="editEvent('${r.id}')">Edit</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+async function eventsPage(){
+ const {data,error}=await sb.from("etx_events").select("*").order("created_at",{ascending:false});if(error)throw error;cache.events=data||[];
+ $("content").innerHTML=`<div class="panel"><div class="panelhead"><h2>Semua Event</h2><button class="btn small" onclick="openEvent()">+ Tambah Event</button></div>${eventTable(cache.events)}</div>`;
+}
+window.editEvent=async id=>{const r=cache.events.find(x=>x.id===id);if(!r)return;openEvent(r)};
+function toLocalDateTimeValue(value){
+ const d = value ? new Date(value) : null;
+ if(!d || Number.isNaN(d.getTime())) return "";
+ const local = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+ return local.toISOString().slice(0,16);
+}
+function storageObjectPath(publicUrl,bucket,prefix){
+ if(!publicUrl)return "";
+ try{
+  const pathname=new URL(publicUrl).pathname;
+  const marker=`/storage/v1/object/public/${bucket}/`;
+  const at=pathname.indexOf(marker);
+  if(at<0)return "";
+  const path=decodeURIComponent(pathname.slice(at+marker.length));
+  return path.startsWith(prefix)?path:"";
+ }catch(_){return ""}
+}
+function clearEventCoverObjectUrl(){
+ const img=$("evCoverPreview");
+ if(img.dataset.objectUrl){URL.revokeObjectURL(img.dataset.objectUrl);delete img.dataset.objectUrl}
+}
+function setEventCoverPreview(url,status){
+ const img=$("evCoverPreview");clearEventCoverObjectUrl();
+ if(url){img.src=url;img.classList.remove("hidden")}else{img.removeAttribute("src");img.classList.add("hidden")}
+ $("evCoverStatus").textContent=status|| (url?"Cover event siap digunakan.":"Belum ada gambar cover.");
+}
+function normalizeEventSlug(rawSlug){
+ return String(rawSlug||"").toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"event";
+}
+async function saveEventWithUniqueSlug(payload,id,userId){
+ const base=normalizeEventSlug(payload.slug);
+ for(let suffix=1;suffix<=10000;suffix++){
+  const candidate=suffix===1?base:`${base}-${suffix}`;
+  const row={...payload,slug:candidate};
+  const q=id
+   ? sb.from("etx_events").update(row).eq("id",id)
+   : sb.from("etx_events").insert({...row,organizer_id:userId});
+  const {error}=await q;
+  if(!error)return candidate;
+  const isSlugConflict=error.code==="23505" && /etx_events_slug_key|slug/i.test(`${error.message||""} ${error.details||""} ${error.hint||""}`);
+  if(!isSlugConflict)throw error;
+ }
+ throw new Error("Tidak dapat membuat Slug URL unik setelah banyak percobaan. Coba judul lain.");
+}
+function openEvent(r=null){
+ clearEventCoverObjectUrl();$("eventForm").reset();$("eventId").value=r?.id||"";$("eventModalTitle").textContent=r?"Edit Event":"Tambah Event";
+ $("evTitle").value=r?.title||"";$("evSlug").value=r?.slug||"";$("evCategory").value=r?.category||"";$("evCity").value=r?.city||"";
+ $("evVenue").value=r?.venue_name||"";$("evAddress").value=r?.venue_address||"";$("evStart").value=r?.starts_at?toLocalDateTimeValue(r.starts_at):"";
+ $("evEnd").value=r?.ends_at?toLocalDateTimeValue(r.ends_at):"";$("evCover").value=r?.cover_image_url||"";$("evCoverPath").value=storageObjectPath(r?.cover_image_url,BANNER_BUCKET,"event-covers/");$("evDescription").value=r?.description||"";$("evStatus").value=r?.status||"draft";
+ $("removeEvCover").classList.add("hidden");setEventCoverPreview(r?.cover_image_url||"",r?.cover_image_url?"Cover saat ini. Pilih gambar baru jika ingin menggantinya.":"Belum ada gambar cover.");
+ hide("eventFormNotice");$("eventModal").classList.remove("hidden");
+}
+$("evCoverFile").addEventListener("change",()=>{
+ const file=$("evCoverFile").files[0];
+ if(!file){$("removeEvCover").classList.add("hidden");setEventCoverPreview($("evCover").value,"Cover saat ini tetap digunakan.");return}
+ if(!/^image\/(jpeg|png|webp|gif)$/.test(file.type)||file.size>MAX_BANNER_BYTES){$("evCoverFile").value="";$("removeEvCover").classList.add("hidden");setEventCoverPreview($("evCover").value,$("evCover").value?"Cover lama tetap digunakan.":"Belum ada gambar cover.");notice("eventFormNotice","File cover harus JPG, PNG, WEBP, atau GIF dan maksimal 5 MB.",true);return}
+ hide("eventFormNotice");const url=URL.createObjectURL(file);setEventCoverPreview(url,`${file.name} · ${(file.size/1024/1024).toFixed(2)} MB · siap diunggah.`);$("evCoverPreview").dataset.objectUrl=url;$("removeEvCover").classList.remove("hidden");
+});
+$("removeEvCover").onclick=()=>{
+ $("evCoverFile").value="";$("removeEvCover").classList.add("hidden");
+ const current=$("evCover").value;setEventCoverPreview(current,current?"Cover lama tetap digunakan.":"Cover dihapus dari formulir.");
+};
+function closeEventModal(){$("eventModal").classList.add("hidden");clearEventCoverObjectUrl()}
+$("closeModal").onclick=$("cancelEvent").onclick=closeEventModal;
+$("evTitle").addEventListener("input",()=>{if(!$("eventId").value)$("evSlug").value=$("evTitle").value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")});
+$("eventForm").onsubmit=async e=>{
+ e.preventDefault();const id=$("eventId").value,file=$("evCoverFile").files[0],oldCover=$("evCover").value.trim(),oldPath=$("evCoverPath").value;
+ const startValue=$("evStart").value,endValue=$("evEnd").value;
+ const startDate=new Date(startValue),endDate=endValue?new Date(endValue):null;
+ if(!startValue||Number.isNaN(startDate.getTime())){notice("eventFormNotice","Tanggal mulai tidak valid.",true);return}
+ if(endDate&&(Number.isNaN(endDate.getTime())||endDate<startDate)){notice("eventFormNotice","Waktu selesai harus sama dengan atau setelah waktu mulai.",true);return}
+ if(file&&(!/^image\/(jpeg|png|webp|gif)$/.test(file.type)||file.size>MAX_BANNER_BYTES)){notice("eventFormNotice","File cover harus JPG, PNG, WEBP, atau GIF dan maksimal 5 MB.",true);return}
+ const payload={title:$("evTitle").value.trim(),slug:$("evSlug").value.trim(),category:$("evCategory").value.trim()||null,city:$("evCity").value.trim()||null,venue_name:$("evVenue").value.trim()||null,venue_address:$("evAddress").value.trim()||null,starts_at:startDate.toISOString(),ends_at:endDate?endDate.toISOString():null,cover_image_url:oldCover||null,description:$("evDescription").value.trim()||null,status:$("evStatus").value};
+ const btn=$("eventSaveBtn"),newPath=file?`event-covers/${crypto.randomUUID()}.${({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif"})[file.type]}`:"";
+ let uploadedPath="",eventSaved=false;btn.disabled=true;btn.textContent=file?"Mengunggah cover...":"Menyimpan event...";
+ try{
+  if(file){const {error:uploadError}=await sb.storage.from(BANNER_BUCKET).upload(newPath,file,{cacheControl:"3600",contentType:file.type,upsert:false});if(uploadError)throw uploadError;uploadedPath=newPath;payload.cover_image_url=sb.storage.from(BANNER_BUCKET).getPublicUrl(newPath).data.publicUrl}
+  let userId=null;
+  if(!id){const {data:{user},error:userError}=await sb.auth.getUser();if(userError||!user)throw userError||new Error("Sesi login tidak ditemukan. Silakan login kembali.");userId=user.id}
+  payload.slug=await saveEventWithUniqueSlug(payload,id,userId);
+  $("evSlug").value=payload.slug;
+  eventSaved=true;
+  if(uploadedPath&&oldPath&&oldPath!==uploadedPath){const {error:removeError}=await sb.storage.from(BANNER_BUCKET).remove([oldPath]);if(removeError)console.warn("Cover lama belum terhapus:",removeError.message)}
+  closeEventModal();toast("Event berhasil disimpan");await loadTab("events");
+ }catch(err){if(uploadedPath&&!eventSaved){const {error:cleanupError}=await sb.storage.from(BANNER_BUCKET).remove([uploadedPath]);if(cleanupError)console.warn("Upload cover gagal dibersihkan:",cleanupError.message)}const msg=err.code==="23505"?"Slug URL baru saja dipakai oleh event lain. Silakan klik Simpan Event sekali lagi agar sistem membuat slug unik.":err.message;notice("eventFormNotice","Gagal menyimpan event: "+msg,true)}
+ finally{btn.disabled=false;btn.textContent="Simpan Event"}
+};
+async function ticketsPage(){
+ const [{data:types,error},{data:events,error:ee}]=await Promise.all([sb.from("etx_ticket_types").select("*").order("created_at",{ascending:false}),sb.from("etx_events").select("id,title").order("title")]);
+ if(error)throw error;if(ee)throw ee;cache.types=types||[];cache.events=events||[];
+ $("content").innerHTML=`<div class="panel"><div class="panelhead"><h2>Jenis Tiket</h2><button class="btn small" onclick="openTicket()">+ Tambah Jenis Tiket</button></div>${cache.types.length?`<div class="tablewrap"><table><thead><tr><th>Nama</th><th>Event</th><th>Harga</th><th>Kuota</th><th>Terjual</th><th>Aktif</th><th>Aksi</th></tr></thead><tbody>${cache.types.map(t=>`<tr><td>${esc(t.name)}</td><td>${esc(cache.events.find(e=>e.id===t.event_id)?.title||t.event_id)}</td><td>${money(t.price)}</td><td>${t.quota}</td><td>${t.sold??0}</td><td>${t.is_active?"Ya":"Tidak"}</td><td><button class="btn secondary small" onclick="editTicket('${t.id}')">Edit</button> <button class="btn danger small" onclick="deleteTicket('${t.id}')">Hapus</button></td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">Belum ada jenis tiket.</div>'}</div>`;
+}
+window.openTicket=(r=null)=>{
+ $("ticketForm").reset();$("ticketId").value=r?.id||"";$("ticketModalTitle").textContent=r?"Edit Jenis Tiket":"Tambah Jenis Tiket";
+ $("ticketEvent").innerHTML=cache.events.map(e=>`<option value="${e.id}">${esc(e.title)}</option>`).join("");
+ $("ticketEvent").value=r?.event_id||cache.events[0]?.id||"";$("ticketName").value=r?.name||"";$("ticketPrice").value=r?.price??0;$("ticketQuota").value=r?.quota??1;$("ticketSold").value=r?.sold??0;$("ticketActive").value=String(r?.is_active??true);
+ hide("ticketFormNotice");$("ticketModal").classList.remove("hidden");
+};
+window.editTicket=id=>{const r=cache.types.find(x=>x.id===id);if(r)openTicket(r)};
+window.deleteTicket=async id=>{if(!confirm("Hapus jenis tiket ini?"))return;const {error}=await sb.from("etx_ticket_types").delete().eq("id",id);if(error)toast(error.message);else{toast("Jenis tiket dihapus");loadTab("tickets")}};
+$("closeTicketModal").onclick=$("cancelTicket").onclick=()=> $("ticketModal").classList.add("hidden");
+$("ticketForm").onsubmit=async e=>{e.preventDefault();const id=$("ticketId").value;const p={event_id:$("ticketEvent").value,name:$("ticketName").value.trim(),price:Number($("ticketPrice").value),quota:Number($("ticketQuota").value),sold:Number($("ticketSold").value||0),is_active:$("ticketActive").value==="true"};
+ if(!p.event_id || !p.name || !Number.isFinite(p.price) || p.price<0 || !Number.isInteger(p.quota) || p.quota<1 || !Number.isInteger(p.sold) || p.sold<0 || p.sold>p.quota){notice("ticketFormNotice","Periksa event, nama, harga, kuota, dan jumlah terjual. Jumlah terjual tidak boleh melebihi kuota.",true);return}
+ try{const q=id?sb.from("etx_ticket_types").update(p).eq("id",id):sb.from("etx_ticket_types").insert(p);const {error}=await q;if(error)throw error;$("ticketModal").classList.add("hidden");toast("Jenis tiket disimpan");await loadTab("tickets")}catch(err){notice("ticketFormNotice",err.message,true)}};
+async function bannersPage(){
+ const {data,error}=await sb.from("etx_banners").select("*").order("sort_order",{ascending:true}).order("created_at",{ascending:false});
+ if(error)throw error;cache.banners=data||[];
+ const rows=cache.banners.map(b=>`<tr><td><div class="banner-row"><img class="banner-thumb" src="${esc(b.image_url)}" alt=""><div><strong>${esc(b.title)}</strong><div class="muted">${esc(b.tag||"")}</div></div></div></td><td>${Number(b.sort_order)||0}</td><td><span class="pill ${b.is_active?'green':'orange'}">${b.is_active?'Aktif':'Nonaktif'}</span></td><td><div class="actions"><button class="btn secondary small" onclick="editBanner('${b.id}')">Edit</button><button class="btn danger small" onclick="deleteBanner('${b.id}')">Hapus</button></div></td></tr>`).join("");
+ $("content").innerHTML=`<div class="panel"><div class="panelhead"><div><h2>Banner Promosi</h2><p class="muted">Upload gambar dan atur banner yang tampil di halaman utama website.</p></div><button class="btn small" onclick="openBanner()">+ Upload Banner</button></div><div class="notice">Gambar disimpan di Supabase Storage (${BANNER_BUCKET}). Banner aktif ditampilkan di halaman utama sesuai urutan.</div>${rows?`<div class="tablewrap"><table><thead><tr><th>Banner</th><th>Urutan</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table></div>`:'<div class="empty">Belum ada banner. Tekan Upload Banner untuk menambahkan.</div>'}</div>`;
+}
+function openBanner(r=null){
+ $("bannerForm").reset();$("bannerId").value=r?.id||"";$("bannerOldPath").value=r?.storage_path||"";
+ $("bannerModalTitle").textContent=r?"Edit Banner":"Upload Banner";$("bannerTitle").value=r?.title||"";$("bannerTag").value=r?.tag||"";$("bannerSub").value=r?.subtitle||"";$("bannerLink").value=r?.link_url||"";$("bannerOrder").value=r?.sort_order??0;$("bannerActive").value=String(r?.is_active??true);
+ $("bannerFile").required=!r;$("bannerPreview").src=r?.image_url||"";$("bannerPreview").classList.toggle("hidden",!r?.image_url);hide("bannerFormNotice");$("bannerModal").classList.remove("hidden");
+}
+window.openBanner=openBanner;
+window.editBanner=id=>{const r=cache.banners.find(x=>x.id===id);if(r)openBanner(r)};
+$("bannerFile").addEventListener("change",()=>{const f=$("bannerFile").files[0];if(!f)return;const url=URL.createObjectURL(f);const img=$("bannerPreview");if(img.dataset.objectUrl)URL.revokeObjectURL(img.dataset.objectUrl);img.dataset.objectUrl=url;img.src=url;img.classList.remove("hidden")});
+$("closeBannerModal").onclick=$("cancelBanner").onclick=()=>$("bannerModal").classList.add("hidden");
+$("bannerForm").onsubmit=async e=>{
+ e.preventDefault();const id=$("bannerId").value, file=$("bannerFile").files[0], oldPath=$("bannerOldPath").value;
+ const title=$("bannerTitle").value.trim(), link=$("bannerLink").value.trim();
+ if(!title){notice("bannerFormNotice","Judul banner wajib diisi.",true);return}
+ if(link && !(/^(https:\/\/|http:\/\/|\/|#)/i.test(link))){notice("bannerFormNotice","Link harus berupa HTTPS, path relatif, atau anchor #.",true);return}
+ if(file && (!/^image\/(jpeg|png|webp|gif)$/.test(file.type)||file.size>MAX_BANNER_BYTES)){notice("bannerFormNotice","File harus JPG, PNG, WEBP, atau GIF dan maksimal 5 MB.",true);return}
+ if(!id&&!file){notice("bannerFormNotice","Pilih gambar banner terlebih dahulu.",true);return}
+ const btn=$("saveBannerBtn");btn.disabled=true;btn.textContent="Mengunggah...";
+ try{
+  let imageUrl=null,storagePath=oldPath;
+  if(file){const ext=({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif"})[file.type];storagePath=`${crypto.randomUUID()}.${ext}`;
+   const {error:upErr}=await sb.storage.from(BANNER_BUCKET).upload(storagePath,file,{cacheControl:"3600",contentType:file.type,upsert:false});if(upErr)throw upErr;
+   imageUrl=sb.storage.from(BANNER_BUCKET).getPublicUrl(storagePath).data.publicUrl;
+  }
+  const payload={title,tag:$("bannerTag").value.trim()||null,subtitle:$("bannerSub").value.trim()||null,link_url:link||"#/explore",sort_order:Number($("bannerOrder").value||0),is_active:$("bannerActive").value==="true"};
+  if(imageUrl){payload.image_url=imageUrl;payload.storage_path=storagePath}
+  const q=id?sb.from("etx_banners").update(payload).eq("id",id):sb.from("etx_banners").insert(payload);const {error}=await q;if(error)throw error;
+  if(file&&oldPath&&oldPath!==storagePath){const {error:removeErr}=await sb.storage.from(BANNER_BUCKET).remove([oldPath]);if(removeErr)console.warn("Gambar lama belum terhapus:",removeErr.message)}
+  $("bannerModal").classList.add("hidden");toast("Banner berhasil disimpan");await loadTab("banners");
+ }catch(err){notice("bannerFormNotice","Gagal menyimpan banner: "+err.message,true)}
+ finally{btn.disabled=false;btn.textContent="Upload & Simpan Banner"}
+};
+window.deleteBanner=async id=>{const b=cache.banners.find(x=>x.id===id);if(!b||!confirm("Hapus banner ini beserta file gambarnya?"))return;try{const {error}=await sb.from("etx_banners").delete().eq("id",id);if(error)throw error;if(b.storage_path){const {error:re}=await sb.storage.from(BANNER_BUCKET).remove([b.storage_path]);if(re)console.warn("File gambar tidak terhapus:",re.message)}toast("Banner dihapus");await loadTab("banners")}catch(e){toast("Gagal menghapus: "+e.message)}};
+async function dataTable(table,title,columns){
+ const {data,error}=await sb.from(table).select("*").order("created_at",{ascending:false}).limit(250);if(error)throw error;
+ $("content").innerHTML=`<div class="panel"><div class="panelhead"><h2>${title} (maks. 250 terbaru)</h2><button class="btn secondary small" onclick="loadTab('${currentTab}')">Muat ulang</button></div>${data?.length?`<div class="tablewrap"><table><thead><tr>${columns.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${data.map(row=>`<tr>${columns.map(c=>`<td>${esc(row[c]??"—")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:'<div class="empty">Belum ada data.</div>'}</div>`;
+}
+window.loadTab=loadTab;
+boot();
+</script>
+</body>
+</html>
